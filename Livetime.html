@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangkok Time</title>
+    <style>
+        body {
+            background-color: #eed8fb;
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: #793d9f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0; /* Reset default margins */
+        }
+        .livetimes {
+            text-align: center;
+        }
+        #clock {
+            font-size: 20vw; /* Use viewport width for responsive sizing */
+            margin-bottom: 1vw;
+        }
+        .h {
+            font-size: 5vw; /* Use viewport width for responsive sizing */
+        }
+    </style>
+</head>
+<body>
+    <div class="livetimes">
+        <div class="h">Livetimes</div>
+        <div id="clock"></div>
+        <div class="h" id="date"></div>
+    </div>
+    <script>
+        function updateClock() {
+            fetch('https://worldtimeapi.org/api/timezone/Asia/Bangkok')
+                .then(response => response.json())
+                .then(data => {
+                    const bangkokTime = data.datetime.slice(11, 19);
+                    const year = data.datetime.slice(0, 4);
+                    const month = data.datetime.slice(5, 7);
+                    const day = data.datetime.slice(8, 10);
+                    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    const bangkokDate = `${day} ${months[parseInt(month)-1]} ${year}`;
+
+                    document.getElementById('clock').textContent = bangkokTime;
+                    document.getElementById('date').textContent = bangkokDate;
+                })
+                .catch(error => {
+                    console.error("Error fetching time:", error);
+                    document.getElementById('clock').textContent = "Error";
+                    document.getElementById('date').textContent = "Error";
+                });
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
